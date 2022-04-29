@@ -35,6 +35,8 @@ foreach (var message in result.GroupBy(x => x.Title).OrderByDescending(x => x.Co
     Console.WriteLine($"{count} {message.Key}");
 }
 
+Console.WriteLine();
+
 TextWriter? jsonWriter = null;
 try
 {
@@ -46,6 +48,7 @@ try
 finally
 {
     jsonWriter?.Close();
+    Console.WriteLine(" * Done");
 }
 
 StreamWriter? txtWriter = null;
@@ -66,4 +69,5 @@ try
 finally
 {
     txtWriter?.Close();
+    Console.WriteLine(" * Done");
 }
