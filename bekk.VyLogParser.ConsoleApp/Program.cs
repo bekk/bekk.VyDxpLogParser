@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using bekk.VyLogParser.ConsoleApp;
 using Newtonsoft.Json;
 
@@ -34,15 +35,35 @@ foreach (var message in result.GroupBy(x => x.Title).OrderByDescending(x => x.Co
     Console.WriteLine($"{count} {message.Key}");
 }
 
-TextWriter? writer = null;
+TextWriter? jsonWriter = null;
 try
 {
-    Console.WriteLine($"Writing AllLogItems.json");
+    Console.WriteLine("Writing AllLogItems.json");
     var contentsToWriteToFile = JsonConvert.SerializeObject(result);
-    writer = new StreamWriter(Path.Combine(extractPath, "AllLogItems.json"));
-    writer.Write(contentsToWriteToFile);
+    jsonWriter = new StreamWriter(Path.Combine(extractPath, "AllLogItems.json"));
+    jsonWriter.Write(contentsToWriteToFile);
 }
 finally
 {
-    writer?.Close();
+    jsonWriter?.Close();
+}
+
+StreamWriter? txtWriter = null;
+try
+{
+    Console.WriteLine("Writing AllLogItems.log");
+
+    using (txtWriter = File.CreateText(Path.Combine(extractPath, "AllLogItems.log")))
+    {
+        foreach (var logItem in result)
+        {
+            txtWriter.WriteLine(logItem.Date.ToUniversalTime().ToString(CultureInfo.InvariantCulture));
+            txtWriter.WriteLine(logItem.Message);
+            txtWriter.WriteLine("\r\n\r\n");
+        }
+    }
+}
+finally
+{
+    txtWriter?.Close();
 }
