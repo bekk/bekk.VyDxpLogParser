@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "bekk.VyLogParser.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\temp\\Source\\Log_2022-04-26--12_2022-04-27--12.zip\" \"c:\\temp\\destination\""
+    }
+  }
+}
