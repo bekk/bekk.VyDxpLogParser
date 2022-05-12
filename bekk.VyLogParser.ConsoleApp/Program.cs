@@ -7,34 +7,24 @@ var version = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0
 
 Console.WriteLine($"Simple EPi log parser v{version.Major}.{version.Minor}.{version.Build}\n");
 
-var arguments = Environment.GetCommandLineArgs().ToList();
+var commandLineArgs = Environment.GetCommandLineArgs().ToList();
 
-if (arguments.Count == 1)
+if (commandLineArgs.Count == 1)
 {
-    Console.WriteLine("Missing arguments!");
-    Console.WriteLine("Example: bekk.VyLogParser.ConsoleApp -s=\"c:\\downloads\\source.zip\" [optional] -o=\"c:\\destinationFolder\" -c=true|false");
-
-    Console.WriteLine("-s Source zip file");
-    Console.WriteLine("[Optional] -o Output directory (Default uses source folder");
-    Console.WriteLine("[Optional] -c Clear output directory (Default is false)");
+    ConsoleHelper.PrintHelp();
     return;
 }
 
-var rawZipPath = arguments.GetArgument("s");
+var arguments = ConsoleHelper.ParseArguments();
 
-if (string.IsNullOrWhiteSpace(rawZipPath))
+if (arguments == null)
 {
-    Console.WriteLine("Missing zip file argument, aborting!");
+    ConsoleHelper.PrintHelp();
     return;
 }
-
-var sourceFile = new FileInfo(rawZipPath);
-
-var destinationFolder = arguments.GetArgument("o") ?? sourceFile.DirectoryName!;
-var clearDestinationFolder = bool.Parse(arguments.GetArgument("c") ?? "false");
 
 var reader = new LogReader();
-var result = reader.Execute(sourceFile.FullName, destinationFolder, clearDestinationFolder);
+var result = reader.Execute(arguments);
 
 Console.WriteLine($"Total log entries {result.Count}\n");
 
@@ -51,7 +41,7 @@ try
 {
     Console.WriteLine("Writing AllLogItems.json");
     var contentsToWriteToFile = JsonConvert.SerializeObject(result, Formatting.Indented);
-    jsonWriter = new StreamWriter(Path.Combine(destinationFolder, "AllLogItems.json"));
+    jsonWriter = new StreamWriter(Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.json"));
     jsonWriter.Write(contentsToWriteToFile);
 }
 finally
@@ -65,12 +55,32 @@ try
 {
     Console.WriteLine("Writing AllLogItems.log");
 
-    using (txtWriter = File.CreateText(Path.Combine(destinationFolder, "AllLogItems.log")))
+    using (txtWriter = File.CreateText(Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.log")))
     {
         foreach (var logItem in result)
         {
             txtWriter.WriteLine(logItem.Date.ToUniversalTime().ToString(CultureInfo.InvariantCulture));
             txtWriter.WriteLine(logItem.Message);
+            txtWriter.WriteLine("\r\n\r\n");
+        }
+    }
+}
+finally
+{
+    txtWriter?.Close();
+    Console.WriteLine(" * Done");
+}
+
+try
+{
+    Console.WriteLine("Writing summary.log");
+
+    using (txtWriter = File.CreateText(Path.Combine(arguments.OutputDirectory.FullName, "Summary.log")))
+    {
+        foreach (var message in result.GroupBy(x => x.Title).OrderByDescending(x => x.Count()))
+        {
+            var count = message.Count().ToString().PadLeft(5, ' ');
+            txtWriter.WriteLine($"{count} {message.Key}");
             txtWriter.WriteLine("\r\n\r\n");
         }
     }

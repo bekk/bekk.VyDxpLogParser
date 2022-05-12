@@ -2,25 +2,25 @@
 
 namespace bekk.VyLogParser.ConsoleApp;
 
-public class LogReader
+internal class LogReader
 {
-    public List<LogItem> Execute(string sourceFile, string destinationFolder, bool clearDestinationFolder = false)
+    internal List<LogItem> Execute(Arguments arguments)
     {
-        if (clearDestinationFolder && Directory.Exists(destinationFolder))
+        if (arguments.ClearOutputDirectory && arguments.OutputDirectory.Exists)
         {
-            Directory.Delete(destinationFolder, true);
+            arguments.OutputDirectory.Delete(true);
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
-        ZipFile.ExtractToDirectory(sourceFile, destinationFolder, true);
+        ZipFile.ExtractToDirectory(arguments.ZipFile.FullName, arguments.OutputDirectory.FullName, true);
 
-        var files = Directory.GetFiles(destinationFolder, "*.csv", SearchOption.AllDirectories);
+        var files = Directory.GetFiles(arguments.OutputDirectory.FullName, "*.csv", SearchOption.AllDirectories);
 
         var logItems = new List<LogItem>();
         foreach (var file in files)
         {
             using var reader = new StreamReader(file);
-            LogItem logItem = null;
+            LogItem? logItem = null;
 
             while (!reader.EndOfStream)
             {

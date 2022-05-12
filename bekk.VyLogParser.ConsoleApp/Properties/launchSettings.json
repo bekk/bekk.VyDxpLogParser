@@ -2,7 +2,7 @@
   "profiles": {
     "bekk.VyLogParser.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "-s=\"C:\\Users\\oistein.hay\\Downloads\\Log_2022-05-12--12_2022-05-13--12.zip\" -o=\"c:\\temp\" -c=true"
+      "commandLineArgs": "\"C:\\Users\\oistein.hay\\Downloads\\Log_2022-05-12--12_2022-05-13--12.zip\""
     }
   }
 }
