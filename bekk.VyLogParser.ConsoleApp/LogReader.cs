@@ -4,9 +4,9 @@ namespace bekk.VyLogParser.ConsoleApp;
 
 public class LogReader
 {
-    public List<LogItem> Execute(string sourceFile, string destinationFolder)
+    public List<LogItem> Execute(string sourceFile, string destinationFolder, bool clearDestinationFolder = false)
     {
-        if (Directory.Exists(destinationFolder))
+        if (clearDestinationFolder && Directory.Exists(destinationFolder))
         {
             Directory.Delete(destinationFolder, true);
             Thread.Sleep(TimeSpan.FromSeconds(1));
