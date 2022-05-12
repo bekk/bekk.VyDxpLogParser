@@ -81,7 +81,6 @@ try
         {
             var count = message.Count().ToString().PadLeft(5, ' ');
             txtWriter.WriteLine($"{count} {message.Key}");
-            txtWriter.WriteLine("\r\n\r\n");
         }
     }
 }
