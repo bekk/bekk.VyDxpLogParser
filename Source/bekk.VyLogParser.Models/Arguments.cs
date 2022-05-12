@@ -1,6 +1,6 @@
-﻿namespace bekk.VyLogParser.ConsoleApp;
+﻿namespace bekk.VyLogParser.Models;
 
-internal class Arguments
+public class Arguments
 {
     public FileInfo ZipFile { get; set; } = null!;
     public DirectoryInfo OutputDirectory { get; set; } = null!;

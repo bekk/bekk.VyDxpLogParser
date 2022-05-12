@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using bekk.VyLogParser.ConsoleApp;
+using bekk.VyLogParser.Library;
 using Newtonsoft.Json;
 
 var version = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0, 0);

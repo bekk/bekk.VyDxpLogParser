@@ -1,8 +1,10 @@
-﻿namespace bekk.VyLogParser.ConsoleApp;
+﻿using bekk.VyLogParser.Models;
 
-internal static class ConsoleHelper
+namespace bekk.VyLogParser.ConsoleApp;
+
+public static class ConsoleHelper
 {
-    internal static Arguments? ParseArguments()
+    public static Arguments? ParseArguments()
     {
         var arguments = Environment.GetCommandLineArgs().ToList();
 
@@ -32,7 +34,7 @@ internal static class ConsoleHelper
 
     }
 
-    internal static string? GetArgument(this IEnumerable<string> args, string name)
+    public static string? GetArgument(this IEnumerable<string> args, string name)
     {
         try
         {
@@ -48,14 +50,14 @@ internal static class ConsoleHelper
         }
     }
 
-    internal static void PrintHelp()
+    public static void PrintHelp()
     {
         Console.WriteLine("Missing arguments!");
         Console.WriteLine("Example: bekk.VyLogParser.ConsoleApp \"c:\\downloads\\source.zip\" [optional] -o=\"c:\\destinationFolder\" -c=true|false");
 
         Console.WriteLine("First argument must be the archive file");
 
-        Console.WriteLine("[Optional] -o Output directory (Default uses source folder");
+        Console.WriteLine("[Optional] -o Output directory (Default uses source folder)");
         Console.WriteLine("[Optional] -c Clear output directory (Default is false)");
     }
 }

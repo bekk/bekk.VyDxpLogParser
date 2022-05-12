@@ -1,10 +1,11 @@
 ﻿using System.IO.Compression;
+using bekk.VyLogParser.Models;
 
-namespace bekk.VyLogParser.ConsoleApp;
+namespace bekk.VyLogParser.Library;
 
-internal class LogReader
+public class LogReader
 {
-    internal List<LogItem> Execute(Arguments arguments)
+    public List<LogItem> Execute(Arguments arguments)
     {
         if (arguments.ClearOutputDirectory && arguments.OutputDirectory.Exists)
         {
