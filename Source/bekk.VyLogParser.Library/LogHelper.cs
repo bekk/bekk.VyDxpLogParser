@@ -78,7 +78,7 @@ public static class LogHelper
 
         try
         {
-            fileName = Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.log");
+            fileName = Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.txt");
             using (txtWriter = File.CreateText(fileName))
             {
                 foreach (var logItem in result)
