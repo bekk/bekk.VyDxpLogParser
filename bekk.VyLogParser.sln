@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bekk.VyLogParser.ConsoleApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bekk.VyLogParser.WebApp", "Source\bekk.VyLogParser.WebApp\bekk.VyLogParser.WebApp.csproj", "{38735866-F9CB-42E1-B153-D9D8DCBAF60D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bekk.VyLogParser.Library", "Source\bekk.VyLogParser.Library\bekk.VyLogParser.Library.csproj", "{C6731E99-A307-4505-A2E4-47AB0F916EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bekk.VyLogParser.Library", "Source\bekk.VyLogParser.Library\bekk.VyLogParser.Library.csproj", "{C6731E99-A307-4505-A2E4-47AB0F916EC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bekk.VyLogParser.Models", "Source\bekk.VyLogParser.Models\bekk.VyLogParser.Models.csproj", "{05C8C46E-19FF-4584-97F8-F58F69E6792F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bekk.VyLogParser.Models", "Source\bekk.VyLogParser.Models\bekk.VyLogParser.Models.csproj", "{05C8C46E-19FF-4584-97F8-F58F69E6792F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

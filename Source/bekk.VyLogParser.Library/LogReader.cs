@@ -3,9 +3,9 @@ using bekk.VyLogParser.Models;
 
 namespace bekk.VyLogParser.Library;
 
-public class LogReader
+public static class LogReader
 {
-    public List<LogItem> Execute(Arguments arguments)
+    public static List<LogItem> Execute(Arguments arguments)
     {
         if (arguments.ClearOutputDirectory && arguments.OutputDirectory.Exists)
         {
@@ -66,19 +66,4 @@ public class LogReader
 
         return logItems.OrderBy(x => x.Date).ToList();
     }
-}
-
-public class LogItem
-{
-    public DateTime Date { get; set; }
-    public string Level { get; set; } = null!;
-    public string ApplicationName { get; set; } = null!;
-    public string InstanceId { get; set; } = null!;
-    public string EventTickCount { get; set; } = null!;
-    public string EventId { get; set; } = null!;
-    public string PId { get; set; } = null!;
-    public string Tid { get; set; } = null!;
-    public string Message { get; set; } = null!;
-    public string Title { get; set; } = null!;
-
 }
