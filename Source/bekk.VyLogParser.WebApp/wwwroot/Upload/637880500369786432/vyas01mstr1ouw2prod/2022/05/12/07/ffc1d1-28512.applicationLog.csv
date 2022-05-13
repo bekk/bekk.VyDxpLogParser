@@ -1,0 +1,25 @@
+date,level,applicationName,instanceId,eventTickCount,eventId,pid,tid,message,activityId
+2022-05-12T07:28:48,Error,vyas01mstr1ouw2prod,ffc1d1,637879373283032923,0,28512,77,"EPiServer.ContentApi.Cms.Controllers.ContentApiController : Error occurred during Content Api Get Request
+System.Net.WebException: The remote server returned an error: (502) Bad Gateway.
+   at System.Net.WebClient.DownloadDataInternal(Uri address, WebRequest& request)
+   at System.Net.WebClient.DownloadString(Uri address)
+   at Vy.Web.Business.SiteWide.GlobalDataFactory.GetAppDetails(Object padlock, String appId, CultureInfo culture) in C:\projects\vy-dxp\src\Web\Business\SiteWide\GlobalDataFactory.cs:line 256
+   at Vy.Web.Business.SiteWide.GlobalDataFactory.GetAllGlobalData(IContent content, CultureInfo culture) in C:\projects\vy-dxp\src\Web\Business\SiteWide\GlobalDataFactory.cs:line 96
+   at Vy.Web.Models.ExtendedContentModelMapper.AddGlobalData(IContent content, ContentApiModel contentModel) in C:\projects\vy-dxp\src\Web\Models\ExtendedContentModelMapper.cs:line 171
+   at Vy.Web.Models.ExtendedContentModelMapper.TransformContent(IContent content, Boolean excludePersonalizedContent, String expand) in C:\projects\vy-dxp\src\Web\Models\ExtendedContentModelMapper.cs:line 98
+   at EPiServer.ContentApi.Core.Serialization.ContentConvertingService.ConvertToContentApiModel(IContent content, ConverterContext converterContext)
+   at EPiServer.ContentApi.Core.Serialization.ContentConvertingService.Convert(IContent content, ConverterContext converterContext)
+   at EPiServer.ContentApi.Cms.Controllers.ContentApiController.ResultFromContent(IContent content, String expand, String select, Boolean addMetadataHeaders, ContextMode contextMode, SiteDefinition site, String remainingRoute, String language)
+   at EPiServer.ContentApi.Cms.Controllers.ContentApiController.Get(String contentReference, List`1 languages, String expand, String select)",
+2022-05-12T07:28:48,Error,vyas01mstr1ouw2prod,ffc1d1,637879373283189792,0,28512,77,"EPiServer.ContentApi.Cms.Controllers.ContentApiController : Error occurred during Content Api Request
+System.Net.WebException: The remote server returned an error: (502) Bad Gateway.
+   at System.Net.WebClient.DownloadDataInternal(Uri address, WebRequest& request)
+   at System.Net.WebClient.DownloadString(Uri address)
+   at Vy.Web.Business.SiteWide.GlobalDataFactory.GetAppDetails(Object padlock, String appId, CultureInfo culture) in C:\projects\vy-dxp\src\Web\Business\SiteWide\GlobalDataFactory.cs:line 256
+   at Vy.Web.Business.SiteWide.GlobalDataFactory.GetAllGlobalData(IContent content, CultureInfo culture) in C:\projects\vy-dxp\src\Web\Business\SiteWide\GlobalDataFactory.cs:line 96
+   at Vy.Web.Models.ExtendedContentModelMapper.AddGlobalData(IContent content, ContentApiModel contentModel) in C:\projects\vy-dxp\src\Web\Models\ExtendedContentModelMapper.cs:line 171
+   at Vy.Web.Models.ExtendedContentModelMapper.TransformContent(IContent content, Boolean excludePersonalizedContent, String expand) in C:\projects\vy-dxp\src\Web\Models\ExtendedContentModelMapper.cs:line 98
+   at EPiServer.ContentApi.Core.Serialization.ContentConvertingService.ConvertToContentApiModel(IContent content, ConverterContext converterContext)
+   at EPiServer.ContentApi.Core.Serialization.ContentConvertingService.Convert(IContent content, ConverterContext converterContext)
+   at EPiServer.ContentApi.Cms.Controllers.ContentApiController.ResultFromContent(IContent content, String expand, String select, Boolean addMetadataHeaders, ContextMode contextMode, SiteDefinition site, String remainingRoute, String language)
+   at EPiServer.ContentApi.Cms.Controllers.ContentApiController.Get(String contentReference, List`1 languages, String expand, String select)",

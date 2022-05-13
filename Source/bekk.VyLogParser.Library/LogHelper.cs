@@ -6,21 +6,23 @@ namespace bekk.VyLogParser.Library;
 
 public static class LogHelper
 {
-    public static void Execute(Arguments arguments, List<LogItem> result)
+    public static IEnumerable<string> Execute(Arguments arguments, List<LogItem> result)
     {
-        WriteAllLogItemsAsJson(arguments, result);
-
-        WriteAllLogItems(arguments, result);
-
-        WriteSummaryLog(arguments, result);
+        yield return WriteAllLogItemsAsJson(arguments, result);
+        yield return WriteAllLogItems(arguments, result);
+        yield return WriteSummaryLog(arguments, result);
     }
 
-    private static void WriteSummaryLog(Arguments arguments, IEnumerable<LogItem> result)
+    private static string WriteSummaryLog(Arguments arguments, IEnumerable<LogItem> result)
     {
         StreamWriter? txtWriter = null;
+        string fileName;
+
         try
         {
-            using (txtWriter = File.CreateText(Path.Combine(arguments.OutputDirectory.FullName, "Summary.log")))
+            fileName = Path.Combine(arguments.OutputDirectory.FullName, "Summary.txt");
+
+            using (txtWriter = File.CreateText(fileName))
             {
                 foreach (var message in result.GroupBy(x => x.Title).OrderByDescending(x => x.Count()))
                 {
@@ -33,29 +35,40 @@ public static class LogHelper
         {
             txtWriter?.Close();
         }
+
+        return fileName;
     }
 
-    private static void WriteAllLogItemsAsJson(Arguments arguments, List<LogItem> result)
+    private static string WriteAllLogItemsAsJson(Arguments arguments, List<LogItem> result)
     {
         TextWriter? jsonWriter = null;
+        string fileName;
+
         try
         {
             var contentsToWriteToFile = JsonConvert.SerializeObject(result, Formatting.Indented);
-            jsonWriter = new StreamWriter(Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.json"));
+
+            fileName = Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.json");
+            jsonWriter = new StreamWriter(fileName);
             jsonWriter.Write(contentsToWriteToFile);
         }
         finally
         {
             jsonWriter?.Close();
         }
+
+        return fileName;
     }
 
-    private static void WriteAllLogItems(Arguments arguments, List<LogItem> result)
+    private static string WriteAllLogItems(Arguments arguments, List<LogItem> result)
     {
         StreamWriter? txtWriter = null;
+        string fileName;
+
         try
         {
-            using (txtWriter = File.CreateText(Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.log")))
+            fileName = Path.Combine(arguments.OutputDirectory.FullName, "AllLogItems.log");
+            using (txtWriter = File.CreateText(fileName))
             {
                 foreach (var logItem in result)
                 {
@@ -69,5 +82,7 @@ public static class LogHelper
         {
             txtWriter?.Close();
         }
+
+        return fileName;
     }
 }

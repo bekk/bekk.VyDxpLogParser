@@ -11,16 +11,29 @@ public class UploadController : Controller
     [HttpPost(Name = "UploadFile")]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
-        var rootFolder = Path.Combine(Directory.GetCurrentDirectory(), $"Upload\\{DateTime.Now.Ticks}");
+        var workFolder = $"wwwroot\\Upload\\{DateTime.Now.Ticks}";
+        var rootFolder = Path.Combine(Directory.GetCurrentDirectory(), workFolder);
         var fileNameOnly = await FileHelper.WriteFile(file, rootFolder);
         var fileName = new FileInfo(Path.Combine(rootFolder, fileNameOnly));
-        var logItems = LogReader.Execute(new Arguments
+        var arguments = new Arguments
         {
             ClearOutputDirectory = false,
             OutputDirectory = fileName.Directory!,
             ZipFile = fileName
-        });
+        };
+        var logItems = LogReader.Execute(arguments);
+        var result = LogHelper.Execute(arguments, logItems);
 
-        return Ok();
+        var response = new List<string>();
+
+        foreach (var physicalFile in result)
+        {
+            var fileInfo = new FileInfo(physicalFile);
+            var downloadFolder = workFolder.Replace("\\", "/").Replace("wwwroot/", string.Empty);
+            var webFile = $"/{downloadFolder}/{fileInfo.Name}";
+            response.Add(webFile);
+        }
+
+        return Ok(response);
     }
 }

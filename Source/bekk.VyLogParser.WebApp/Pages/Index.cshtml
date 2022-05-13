@@ -1,31 +1,80 @@
 ﻿@page
-
 @model IndexModel
 
 @{
     ViewData["Title"] = "Vy Log Parser";
 }
 
-<div class="row mt-2">
-    <div class="col-12">
-        <label class="col-form-label">Select File</label>
-        <input id="fileupload" type="file" name="fileupload" class="form-control" />
-    </div>
+<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" class="mb-3">
+    <p>Drag EPi zip file here ...</p>
 </div>
 
-<div class="row mt-2">
-    <div class="col-12">
-        <button id="upload-button" onclick="uploadFile()" class="btn btn-success">Upload</button>
+<div id="result" style="display: block;">
+    <br/>
+    <div class="card text-white bg-success mb-3">
+        <div class="card-header">Parse results</div>
+        <div class="card-body">
+            <h5 class="card-title">Summary</h5>
+            <p id="summary" class="card-text"></p>
+            <h5 class="card-title">Files available for download</h5>
+            <p id="files" class="card-text"></p>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    async function uploadFile() {
-        let formData = new FormData();           
-        formData.append("file", fileupload.files[0]);
-        await fetch('https://localhost:7256/api/Upload', {
-            method: "POST", 
+    function dragOverHandler(ev) {
+        ev.preventDefault();
+    }
+
+    function dropHandler(ev) {
+        ev.preventDefault();
+
+        let formData = new FormData();
+
+        if (ev.dataTransfer.items) {
+            for (let item = 0; item < ev.dataTransfer.items.length; item++) {
+                if (ev.dataTransfer.items[item].kind === 'file') {
+                    const file = ev.dataTransfer.items[item].getAsFile();
+                    formData.append("file", file);
+                }
+            }
+        } else {
+            for (let file = 0; file < ev.dataTransfer.files.length; file++) {
+                formData.append("file", ev.dataTransfer.files[file]);
+            }
+        }
+
+        fetch('https://localhost:7256/api/Upload', {
+            method: "POST",
             body: formData
-        }).then(x=>console.log(x.status));    
+        }).then(response => response.json())
+            .then((data) => {
+                var resultContainer = $("#result");
+                var summaryContainer = $("#summary");
+                var filesContainer =  $("#files");
+
+                $(resultContainer).show();
+                $(summaryContainer).html("").append("Jallah");
+                $(filesContainer).html("").append(createLink(data[0])).append(createLink(data[1])).append(createLink(data[2]));
+            })
+            .then(() => {
+                formData = null;
+            });
+    }
+
+    function createLink(webFile) {
+        const fileName = webFile.split(/(\\|\/)/g).pop();
+        return `<a href=\"${webFile}\" class=\"text-white\" download=\"${fileName}\">${fileName}</a><br/>`;
     }
 </script>
+
+<style>
+    #drop_zone {
+        border: 5px dashed lightblue;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        font-size: 2rem;
+    }
+</style>
