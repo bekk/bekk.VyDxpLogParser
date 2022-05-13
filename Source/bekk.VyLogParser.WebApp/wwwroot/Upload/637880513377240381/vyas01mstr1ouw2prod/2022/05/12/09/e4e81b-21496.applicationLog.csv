@@ -1,2 +1,0 @@
-date,level,applicationName,instanceId,eventTickCount,eventId,pid,tid,message,activityId
-2022-05-12T09:58:36,Error,vyas01mstr1ouw2prod,e4e81b,637879463167453013,0,21496,5,Thread was being aborted.,

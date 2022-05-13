@@ -1,6 +1,0 @@
- 3913 EPiServer.ContentApi.Cms.Controllers.ContentApiController : Error occurred during Content Api Get Request
- 3913 EPiServer.ContentApi.Cms.Controllers.ContentApiController : Error occurred during Content Api Request
-  384 EPiServer.Global : Unhandled exception in ASP.NET
-    3 Vy.Web.Controllers.ApiFooterController : Unknown error parsing footer menu for language en
-    1 EPiServer.ContentApi.Cms.Controllers.ContentApiController : Content was not found
-    1 Thread was being aborted.
