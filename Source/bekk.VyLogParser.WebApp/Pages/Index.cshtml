@@ -2,14 +2,14 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Vy Log Parser";
+    ViewData["Title"] = "Upload File";
 }
 
 <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" class="mb-3">
     <p>Drag EPi zip file here ...</p>
 </div>
 
-<div id="result" style="display: block;">
+<div id="result" style="display: none;">
     <br/>
     <div class="card text-white bg-success mb-3">
         <div class="card-header">Parse results</div>
@@ -55,8 +55,18 @@
                 var filesContainer =  $("#files");
 
                 $(resultContainer).show();
-                $(summaryContainer).html("").append("Jallah");
-                $(filesContainer).html("").append(createLink(data[0])).append(createLink(data[1])).append(createLink(data[2]));
+                $(summaryContainer).html("");
+
+                for (var s = 0; s < data.summary.length; s++) {
+                    var item = data.summary[s];
+                    $(summaryContainer).append(item).append("</br>");
+                }
+
+                $(filesContainer).html("")
+                    .append(createLink(data.resultAsSummaryFile))
+                    .append(createLink(data.resultAsLogItemsFile))
+                    .append(createLink(data.resultsAsJsonFile));
+
             })
             .then(() => {
                 formData = null;

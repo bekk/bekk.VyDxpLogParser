@@ -8,9 +8,6 @@ namespace bekk.VyLogParser.Library
         {
             try
             {
-                //var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
-                //var fileName = DateTime.Now.Ticks + extension;
-
                 if (!Directory.Exists(rootFolder)) Directory.CreateDirectory(rootFolder);
 
                 var path = Path.Combine(rootFolder, file.FileName);
@@ -28,6 +25,14 @@ namespace bekk.VyLogParser.Library
             }
 
             return string.Empty;
+        }
+        public static string ConvertPhysicalFileToWebFile(string physicalFile, string workFolder)
+        {
+            var fileInfo = new FileInfo(physicalFile);
+            var downloadFolder = workFolder.Replace("\\", "/").Replace("wwwroot/", string.Empty);
+            var webFile = $"/{downloadFolder}/{fileInfo.Name}";
+
+            return webFile;
         }
     }
 }

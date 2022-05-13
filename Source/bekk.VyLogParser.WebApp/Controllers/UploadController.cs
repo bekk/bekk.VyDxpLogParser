@@ -24,16 +24,12 @@ public class UploadController : Controller
         var logItems = LogReader.Execute(arguments);
         var result = LogHelper.Execute(arguments, logItems);
 
-        var response = new List<string>();
-
-        foreach (var physicalFile in result)
-        {
-            var fileInfo = new FileInfo(physicalFile);
-            var downloadFolder = workFolder.Replace("\\", "/").Replace("wwwroot/", string.Empty);
-            var webFile = $"/{downloadFolder}/{fileInfo.Name}";
-            response.Add(webFile);
-        }
-
-        return Ok(response);
+        result.ResultAsLogItemsFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultAsLogItemsFile, workFolder);
+        result.ResultsAsJsonFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultsAsJsonFile, workFolder);
+        result.ResultAsSummaryFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultAsSummaryFile, workFolder);
+        
+        return Ok(result);
     }
+
+    
 }
