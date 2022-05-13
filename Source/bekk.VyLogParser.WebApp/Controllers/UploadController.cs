@@ -27,9 +27,11 @@ public class UploadController : Controller
         result.ResultAsLogItemsFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultAsLogItemsFile, workFolder);
         result.ResultsAsJsonFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultsAsJsonFile, workFolder);
         result.ResultAsSummaryFile = FileHelper.ConvertPhysicalFileToWebFile(result.ResultAsSummaryFile, workFolder);
-        
+
+        Task.Run(() => { FileHelper.CleanupOldArchives(rootFolder); }).FireAndForget();
+
         return Ok(result);
     }
 
-    
+
 }

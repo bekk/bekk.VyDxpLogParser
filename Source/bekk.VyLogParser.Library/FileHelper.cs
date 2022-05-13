@@ -34,5 +34,17 @@ namespace bekk.VyLogParser.Library
 
             return webFile;
         }
+
+        public static void CleanupOldArchives(string rootFolder)
+        {
+            var rootDirectory = new DirectoryInfo(rootFolder);
+            if (!rootDirectory.Exists) return;
+
+            foreach (var directoryInfo in rootDirectory.GetDirectories())
+            {
+                if (directoryInfo.CreationTime > DateTime.Now.AddDays(-1)) continue;
+                directoryInfo.Delete(true);
+            }
+        }
     }
 }
