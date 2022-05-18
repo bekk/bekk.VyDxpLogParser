@@ -6,22 +6,25 @@ namespace bekk.VyLogParser.Library;
 
 public static class LogHelper
 {
-    public static ParseResponse Execute(Arguments arguments, List<LogItem> result)
+    public static ParseResponse Execute(Arguments arguments, List<LogItem> logItems)
     {
-        var resultsAsJson = WriteAllLogItemsAsJson(arguments, result);
-        var resultAsLogItems = WriteAllLogItems(arguments, result);
-        var resultAsSummary = WriteSummaryLog(arguments, result, out var summary);
+        var resultsAsJson = WriteAllLogItemsAsJson(arguments, logItems);
+        var resultAsLogItems = WriteAllLogItems(arguments, logItems);
+        var summaryLogs = logItems.GroupBy(x => x.Title);
+        var resultAsSummary = WriteSummaryLog(arguments, logItems, out var summary);
 
         return new ParseResponse
         {
             ResultsAsJsonFile = resultsAsJson,
             ResultAsLogItemsFile = resultAsLogItems,
             ResultAsSummaryFile = resultAsSummary,
-            Summary = summary
+            Summary = summary,
+            MinLogDate = logItems.Min(x => x.Date).ToString("dd.MM.yyyy HH:mm:ss"),
+            MaxLogDate = logItems.Max(x => x.Date).ToString("dd.MM.yyyy HH:mm:ss")
         };
     }
 
-    private static string WriteSummaryLog(Arguments arguments, IEnumerable<LogItem> result, out List<string> summary)
+    private static string WriteSummaryLog(Arguments arguments, IReadOnlyCollection<LogItem> logItems, out List<string> summary)
     {
         StreamWriter? txtWriter = null;
         string fileName;
@@ -33,12 +36,27 @@ public static class LogHelper
 
             using (txtWriter = File.CreateText(fileName))
             {
-                foreach (var message in result.GroupBy(x => x.Title).OrderByDescending(x => x.Count()))
+                foreach (var message in logItems.GroupBy(x => x.Title).OrderByDescending(x => x.Count()))
                 {
+                    var minSummaryDate = logItems.Where(x => x.Title == message.Key).Min(x => x.Date);
+                    var maxSummaryDate = logItems.Where(x => x.Title == message.Key).Max(x => x.Date);
+
                     var count = message.Count().ToString().PadLeft(5, ' ');
                     var text = $"{count} {message.Key}";
                     txtWriter.WriteLine(text);
                     summary.Add(text);
+
+                    summary.Add("<br/>");
+
+                    text = message.Count() > 1
+                        ? $"First occurrence: {minSummaryDate}, last occurrence: {maxSummaryDate}"
+                        : $"Occurrence: {minSummaryDate}";
+
+                    txtWriter.WriteLine($"      {text}");
+                    summary.Add($"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{text}");
+
+                    txtWriter.WriteLine("\r\n");
+                    summary.Add("<br/><br/>");
                 }
             }
         }

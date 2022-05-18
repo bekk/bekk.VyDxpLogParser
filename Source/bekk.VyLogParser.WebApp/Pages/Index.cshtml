@@ -16,7 +16,7 @@
     <div class="card text-white bg-success mb-3">
         <div class="card-header">Parse results</div>
         <div class="card-body">
-            <h5 class="card-title">Summary</h5>
+            <h5 id="summary-title" class="card-title">Summary</h5>
             <p id="summary" class="card-text"></p>
             <h5 class="card-title">Files available for download</h5>
             <p id="files" class="card-text"></p>
@@ -57,17 +57,19 @@
         }).then(response => response.json())
             .then(handleErrors)
             .then((data) => {
-                var resultContainer = $("#result");
-                var summaryContainer = $("#summary");
-                var filesContainer =  $("#files");
+                const resultContainer = $("#result");
+                const summaryContainer = $("#summary");
+                const filesContainer =  $("#files");
 
                 $("#drop_zone").hide();
                 $(summaryContainer).html("");
                 $(resultContainer).show();
+                
+                $("#summary-title").html(`Summary ${data.minLogDate} - ${data.maxLogDate}`);
 
                 for (let s = 0; s < data.summary.length; s++) {
                     const item = data.summary[s];
-                    $(summaryContainer).append(item).append("</br>");
+                    $(summaryContainer).append(item);
                 }
 
                 $(filesContainer).html("")

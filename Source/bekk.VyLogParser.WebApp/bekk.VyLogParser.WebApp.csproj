@@ -1,18 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<assemblyVersion>1.0.5</assemblyVersion>
+		<assembly>1.0.5</assembly>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\bekk.VyLogParser.Library\bekk.VyLogParser.Library.csproj" />
-    <ProjectReference Include="..\bekk.VyLogParser.Models\bekk.VyLogParser.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\bekk.VyLogParser.Library\bekk.VyLogParser.Library.csproj" />
+		<ProjectReference Include="..\bekk.VyLogParser.Models\bekk.VyLogParser.Models.csproj" />
+	</ItemGroup>
 
 </Project>
