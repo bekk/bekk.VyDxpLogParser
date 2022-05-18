@@ -9,8 +9,10 @@
     <p>Drag EPi zip file here ...</p>
 </div>
 
+<div id="message" class="alert alert-danger" style="display: none;">File not valid!</div>
+
 <div id="result" style="display: none;">
-    <br/>
+    <br />
     <div class="card text-white bg-success mb-3">
         <div class="card-header">Parse results</div>
         <div class="card-body">
@@ -36,29 +38,35 @@
             for (let item = 0; item < ev.dataTransfer.items.length; item++) {
                 if (ev.dataTransfer.items[item].kind === 'file') {
                     const file = ev.dataTransfer.items[item].getAsFile();
-                    formData.append("file", file);
+                    const extension = file.name.split(".").pop();
+                    if(extension==="zip") {
+                        formData.append("file", file);
+                        $("#message").hide();
+                    } else {
+                        $("#message").show();
+                        $("#message").html("").append("File not valid!");
+                        return;
+                    }
                 }
-            }
-        } else {
-            for (let file = 0; file < ev.dataTransfer.files.length; file++) {
-                formData.append("file", ev.dataTransfer.files[file]);
             }
         }
 
-        fetch('https://localhost:7256/api/Upload', {
+        fetch('/api/Upload', {
             method: "POST",
             body: formData
         }).then(response => response.json())
+            .then(handleErrors)
             .then((data) => {
                 var resultContainer = $("#result");
                 var summaryContainer = $("#summary");
                 var filesContainer =  $("#files");
 
-                $(resultContainer).show();
+                $("#drop_zone").hide();
                 $(summaryContainer).html("");
+                $(resultContainer).show();
 
-                for (var s = 0; s < data.summary.length; s++) {
-                    var item = data.summary[s];
+                for (let s = 0; s < data.summary.length; s++) {
+                    const item = data.summary[s];
                     $(summaryContainer).append(item).append("</br>");
                 }
 
@@ -71,6 +79,15 @@
             .then(() => {
                 formData = null;
             });
+    }
+
+    function handleErrors(response) {
+        if (!response.ok) {
+            console.log(response);
+            console.log(response.statusText);
+            //throw Error(response.statusText);
+        }
+        return response;
     }
 
     function createLink(webFile) {
