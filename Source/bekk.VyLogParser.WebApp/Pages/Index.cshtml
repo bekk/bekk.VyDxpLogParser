@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Upload File";
+    var logFilesOnDisk = Model.LogFilesOnDisk.OrderByDescending(x => x.LogStartDate).ToList();
+    var first = logFilesOnDisk.FirstOrDefault();
 }
 
 <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" class="mb-3">
@@ -22,6 +24,17 @@
             <p id="files" class="card-text"></p>
         </div>
     </div>
+</div>
+
+<div class="row">
+    @foreach (var file in logFilesOnDisk)
+    {
+        var cssClass = first?.Name == file.Name ? "btn-primary" : "btn-secondary";
+
+        <div class="col-4">
+            <a href="@file.Url" target="_blank" class="btn @cssClass">@file.Name</a>
+        </div>
+    }
 </div>
 
 <script type="text/javascript">
@@ -64,7 +77,7 @@
                 $("#drop_zone").hide();
                 $(summaryContainer).html("");
                 $(resultContainer).show();
-                
+
                 $("#summary-title").html(`Summary ${data.minLogDate} - ${data.maxLogDate}`);
 
                 for (let s = 0; s < data.summary.length; s++) {
