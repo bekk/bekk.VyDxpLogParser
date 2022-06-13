@@ -49,30 +49,43 @@ namespace bekk.VyLogParser.Library
             }
         }
 
-        public static List<FileOnDiskModel> GetLogFilesOnDisk()
+        public static IEnumerable<FileOnDiskModel> GetLogFilesOnDisk()
         {
             const string workFolder = "wwwroot\\Upload";
             var rootFolder = Path.Combine(Directory.GetCurrentDirectory(), workFolder);
             var rootDirectory = new DirectoryInfo(rootFolder);
-            if (!rootDirectory.Exists) return new List<FileOnDiskModel>();
+
+            if (!rootDirectory.Exists) yield return new FileOnDiskModel();
 
             var logFiles = rootDirectory.GetFiles("*.zip", SearchOption.AllDirectories);
 
-            return logFiles.Select(x => new FileOnDiskModel
+            foreach (var logFile in logFiles)
             {
-                Name = x.Name,
-                Url = ExtractPathAndFileName(x),
-                LogStartDate = ParseDate(x)
-            }).ToList();
+                var parsedFileInfo = ParseFileInfo(logFile);
+
+                yield return new FileOnDiskModel
+                {
+                    Name = parsedFileInfo.Name,
+                    Url = ExtractPathAndFileName(logFile),
+                    LogStartDate = parsedFileInfo.MinDate
+                };
+            }
         }
-
-        private static DateTime ParseDate(FileSystemInfo fileInfo)
+        
+        private static LogFileProperties ParseFileInfo(FileSystemInfo fileInfo)
         {
-            var temp = fileInfo.Name.Split(new[] { "_" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            var dateTimePart = temp.Skip(1).Take(1).First();
-            var datePart = dateTimePart.Split(new[] { "--" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-            return DateTime.Parse(datePart.First());
+            var temp = fileInfo.Name.Split(new[] { "_" }, StringSplitOptions.RemoveEmptyEntries);
+            var minDateString = temp[1];
+            var maxDateString = temp[2];
+            var minDate = DateTime.Parse(minDateString.Split(new[] { "--" }, StringSplitOptions.RemoveEmptyEntries).First());
+            var maxDate = DateTime.Parse(maxDateString.Split(new[] { "--" }, StringSplitOptions.RemoveEmptyEntries).First());
+            
+            return new LogFileProperties
+            {
+                Name = $"From: {minDate:dd.MM.yyyy} To: {maxDate:dd.MM.yyyy}",
+                MinDate = minDate,
+                MaxDate = maxDate
+            };
         }
 
         private static string ExtractPathAndFileName(FileInfo x)
@@ -81,5 +94,12 @@ namespace bekk.VyLogParser.Library
 
             return $"/Upload/{path.Last()}/{x.Name}";
         }
+    }
+
+    public class LogFileProperties
+    {
+        public string Name { get; set; } = null!;
+        public DateTime MinDate { get; set; }
+        public DateTime MaxDate { get; set; }
     }
 }

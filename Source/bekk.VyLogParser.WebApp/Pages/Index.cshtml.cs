@@ -10,6 +10,6 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        LogFilesOnDisk = FileHelper.GetLogFilesOnDisk();
+        LogFilesOnDisk = FileHelper.GetLogFilesOnDisk().ToList();
     }
 }
