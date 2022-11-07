@@ -1,1 +1,2 @@
 dotnet publish -r win-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --self-contained true --output "C:\Users\oistein.hay\Jottacloud\MyApps\VyDxpLogParser"
+start "C:\Users\oistein.hay\Jottacloud\MyApps\VyDxpLogParser"

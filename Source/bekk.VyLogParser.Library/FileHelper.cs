@@ -44,7 +44,7 @@ namespace bekk.VyLogParser.Library
 
             foreach (var directoryInfo in rootDirectory.GetDirectories())
             {
-                if (directoryInfo.CreationTime > DateTime.Now.AddMonths(-6)) continue;
+                if (directoryInfo.CreationTime > DateTime.Now.AddMonths(-2)) continue;
                 directoryInfo.Delete(true);
             }
         }

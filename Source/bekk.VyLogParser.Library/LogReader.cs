@@ -26,7 +26,7 @@ public static class LogReader
             while (!reader.EndOfStream)
             {
                 var data = reader.ReadLine();
-                if (data == null) continue;
+                if (data == null || string.IsNullOrWhiteSpace(data)) continue;
                 var temp = data.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 if (temp[0] == "date") continue;
